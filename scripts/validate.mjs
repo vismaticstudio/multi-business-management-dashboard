@@ -16,6 +16,8 @@ const required = [
   "Scoped to active register",
   "Multi-business Management Dashboard",
   "No live payment",
+  "Let’s Talk",
+  "https://cal.com/vismatic-studio/lets-chat",
 ];
 const missing = required.filter((value) => !html.includes(value));
 if (missing.length) {

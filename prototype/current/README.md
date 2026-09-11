@@ -19,6 +19,8 @@ Open `http://127.0.0.1:8766/`.
 - Owner-only aggregate management dashboard
 - POS optimized for desktop/tablet layouts
 - Management dashboard includes desktop/tablet and mobile menu/navigation behavior
+- Final CTA preserves the left-side proposal copy and presents a `Let’s Talk` button linking to `https://cal.com/vismatic-studio/lets-chat`
+- No Cal.com inline embed or external Cal script is included; the CTA opens the scheduling page as a normal external link
 - Fictional in-memory data only
 - No backend, authentication, payment processing, persistence, live integrations, or external writes
 
