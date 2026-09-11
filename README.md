@@ -57,6 +57,12 @@ The prototype uses fictional data only. It has no backend, authentication, persi
 
 Do not add credentials, API keys, tokens, passwords, connection strings, or real client data to this repository.
 
+The GitHub Pages preview URL is:
+
+`https://vismaticstudio.github.io/multi-business-management-dashboard/`
+
+GitHub Pages deploys the canonical `prototype/current/` folder through `.github/workflows/deploy-pages.yml`. Do not create a second manually maintained `docs/index.html` copy.
+
 ## Validation
 
 Run the local validation command:
