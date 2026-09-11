@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f7f2">
+  <meta name="description" content="Multi-business Management Dashboard — a Vismatic owner oversight concept using sample data.">
+  <link rel="icon" href="data:,">
+  <title>Multi-business Management Dashboard — Vismatic concept</title>
+  <style>
+    :root {
+      --paper: #f8f7f2;
+      --surface: #fffefb;
+      --surface-muted: #f1f3ef;
+      --cream: #efeadf;
+      --ink: #18201d;
+      --ink-soft: #5d6862;
+      --ink-faint: #87918b;
+      --green: #276c5b;
+      --green-dark: #174b3e;
+      --green-weak: #e6f0ec;
+      --amber: #9a661f;
+      --amber-dark: #6d4b18;
+      --amber-weak: #fbf1dc;
+      --red: #a24b3f;
+      --red-weak: #fff0ec;
+      --dark: #13201b;
+      --line: #d9dfda;
+      --line-strong: #c4cec7;
+      --shadow: 0 20px 50px rgba(19, 32, 27, .09), 0 3px 8px rgba(19, 32, 27, .05);
+      --shadow-soft: 0 9px 24px rgba(19, 32, 27, .07);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --max: 1260px;
+      --gutter: clamp(20px, 4vw, 66px);
+      --focus: 0 0 0 3px rgba(154, 102, 31, .45);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Nunito Sans", "Avenir Next", "Segoe UI", sans-serif; font-size: 16px; line-height: 1.55; text-rendering: optimizeLegibility; }
+    img { display: block; max-width: 100%; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .56; }
+    a { color: inherit; }
+    :focus-visible { outline: none; box-shadow: var(--focus); }
+    .skip-link { position: fixed; z-index: 40; left: 12px; top: 12px; padding: 10px 14px; border-radius: 6px; background: var(--dark); color: #fff; transform: translateY(-160%); }
+    .skip-link:focus { transform: translateY(0); }
+    .mono, .eyebrow, .section-number, .sample-pill, .status-chip, .surface-meta, .meta-label, .field-note { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; letter-spacing: .035em; }
+    .eyebrow, .section-number, .meta-label { color: var(--green-dark); font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+    .shell-header { position: sticky; z-index: 20; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 68px; padding: 14px var(--gutter); border-bottom: 1px solid var(--line); background: rgba(248,247,242,.96); backdrop-filter: blur(10px); }
+    .wordmark { font-family: "Avenir Next", "Segoe UI", sans-serif; font-size: 18px; font-weight: 900; letter-spacing: -.06em; }
+    .header-meta { display: flex; align-items: center; gap: 13px; color: var(--ink-soft); font-size: 12px; }
+    .sample-pill { padding: 5px 9px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); }
+    .reset-button, .primary-button, .secondary-button, .ghost-button, .text-button, .business-choice, .tab-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 46px; padding: 10px 16px; border: 1px solid transparent; border-radius: var(--radius-sm); font-weight: 800; text-decoration: none; transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease; }
+    .reset-button { min-height: 40px; padding: 7px 12px; border-color: var(--line-strong); background: var(--surface); color: var(--ink-soft); font-size: 13px; }
+    .reset-button:hover, .secondary-button:hover, .ghost-button:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-weak); }
+    .primary-button { background: var(--green); color: #fff; }
+    .primary-button:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .secondary-button { border-color: var(--line-strong); background: var(--surface); color: var(--ink); }
+    .ghost-button { border-color: var(--line-strong); background: transparent; color: var(--ink-soft); }
+    .text-button { min-height: 44px; padding-inline: 0; border-color: transparent; border-radius: 3px; background: transparent; color: var(--green-dark); }
+    .text-button:hover { color: var(--green); text-decoration: underline; text-underline-offset: 4px; }
+    .story-intro, .story-section, .closing-section { padding-inline: var(--gutter); }
+    .story-inner, .surface-wrap, .closing-inner { max-width: var(--max); margin: 0 auto; }
+    .story-intro { padding-top: clamp(56px, 9vw, 120px); padding-bottom: clamp(74px, 11vw, 152px); }
+    .intro-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(240px, .62fr); gap: clamp(38px, 8vw, 130px); align-items: end; }
+    h1, h2, h3, h4 { margin: 0; font-family: "Avenir Next", "Segoe UI", sans-serif; line-height: 1.07; letter-spacing: -.055em; }
+    h1 { max-width: 870px; margin-top: 16px; font-size: clamp(45px, 7vw, 94px); font-weight: 800; text-wrap: balance; }
+    h2 { font-size: clamp(32px, 4.5vw, 59px); font-weight: 800; text-wrap: balance; }
+    h3 { font-size: clamp(22px, 2.3vw, 32px); }
+    h4 { font-size: 18px; }
+    .lede { max-width: 675px; margin: 25px 0 30px; color: var(--ink-soft); font-size: clamp(18px, 2vw, 22px); line-height: 1.45; text-wrap: pretty; }
+    .intro-actions, .form-actions, .ack-actions, .detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+    .intro-aside { padding-top: 15px; border-top: 1px solid var(--line-strong); color: var(--ink-soft); }
+    .intro-aside strong { display: block; margin: 12px 0 8px; color: var(--ink); font-size: 19px; line-height: 1.3; }
+    .intro-aside p { margin: 0; }
+    .story-section { padding-top: 84px; padding-bottom: 84px; }
+    .story-section.alt { background: var(--cream); }
+    .section-head { display: grid; grid-template-columns: 100px minmax(0, 1fr) minmax(220px, .64fr); gap: 24px; align-items: start; margin-bottom: 40px; }
+    .section-number { padding-top: 8px; }
+    .section-context { margin: 6px 0 0; color: var(--ink-soft); }
+    .notice { display: flex; align-items: flex-start; gap: 11px; margin: 22px 0; padding: 13px 15px; border: 1px solid #e7ce9f; border-radius: var(--radius-sm); background: var(--amber-weak); color: var(--amber-dark); font-size: 13px; }
+    .notice strong { color: #543b13; }
+    .surface, .dashboard-surface { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow); }
+    .surface-topbar, .dashboard-topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 17px 22px; border-bottom: 1px solid var(--line); }
+    .surface-brand { display: flex; align-items: center; gap: 12px; }
+    .surface-mark { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 9px; background: var(--dark); color: #fff; font-size: 14px; font-weight: 900; }
+    .surface-name { font-size: 18px; font-weight: 900; }
+    .surface-meta { color: var(--ink-soft); font-size: 10px; text-transform: uppercase; }
+    .surface-nav, .dashboard-nav { display: flex; gap: 21px; color: var(--ink-soft); font-size: 13px; }
+    .surface-nav a { text-underline-offset: 4px; }
+    .surface-content { padding: clamp(18px, 3vw, 36px); }
+    .pos-intro { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .9fr); gap: clamp(24px, 5vw, 70px); align-items: end; }
+    .pos-intro h2 { max-width: 600px; margin-top: 11px; font-size: clamp(36px, 5vw, 66px); }
+    .pos-intro p { max-width: 540px; margin: 18px 0 0; color: var(--ink-soft); font-size: 17px; }
+    .pos-brief { padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-muted); }
+    .pos-brief strong { display: block; margin: 8px 0; font-size: 16px; }
+    .pos-brief p { margin: 0; font-size: 13px; }
+    .surface-rule { height: 1px; margin: 34px 0; background: var(--line); }
+    .pos-layout { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(300px, .72fr); gap: 34px; align-items: start; }
+    .subhead { margin-bottom: 16px; font-size: 14px; font-weight: 900; letter-spacing: .03em; text-transform: uppercase; }
+    .business-selector { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 28px; }
+    .business-choice { display: block; min-height: 78px; padding: 13px; border-color: var(--line-strong); background: var(--paper); color: var(--ink); text-align: left; }
+    .business-choice:hover { border-color: var(--green); }
+    .business-choice[aria-pressed="true"] { border-color: var(--green); background: var(--green-weak); box-shadow: inset 0 0 0 1px var(--green); }
+    .business-choice strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .business-choice span { color: var(--ink-soft); font-size: 12px; }
+    .option-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .option-card { position: relative; display: flex; align-items: flex-start; gap: 11px; min-height: 92px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); cursor: pointer; }
+    .option-card:has(input:checked) { border-color: var(--green); background: var(--green-weak); }
+    .option-card input { flex: 0 0 auto; width: 18px; height: 18px; margin-top: 2px; accent-color: var(--green); }
+    .option-card strong { display: block; margin-bottom: 4px; font-size: 15px; }
+    .option-card span { display: block; color: var(--ink-soft); font-size: 12px; }
+    .field-note { color: var(--ink-faint); font-size: 10px; }
+    .pos-side { padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-muted); }
+    .summary-list, .detail-list { display: grid; gap: 0; margin: 0; }
+    .summary-list div, .detail-list div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .summary-list dt, .detail-list dt { color: var(--ink-soft); font-size: 13px; }
+    .summary-list dd, .detail-list dd { margin: 0; color: var(--ink); font-weight: 900; text-align: right; }
+    .summary-empty { margin: 0; color: var(--ink-soft); font-size: 14px; }
+    .summary-callout { margin-top: 18px; padding: 14px; border: 1px solid #c7ddd4; border-radius: 9px; background: var(--green-weak); color: var(--green-dark); font-size: 13px; }
+    .summary-callout strong { display: block; margin-bottom: 4px; }
+    .pos-submit { margin-top: 24px; }
+    .pos-submit > button { width: 100%; }
+    .error-text { min-height: 19px; margin-top: 6px; color: var(--red); font-size: 12px; }
+    .review-box { display: none; margin-top: 26px; padding: 19px; border: 1px solid #c7ddd4; border-radius: 11px; background: var(--green-weak); }
+    .review-box.is-visible { display: block; animation: enter .28s ease both; }
+    .review-box h4 { margin-bottom: 13px; }
+    .review-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 24px; margin: 0; font-size: 13px; }
+    .review-summary dt { color: var(--ink-soft); }
+    .review-summary dd { margin: 0; font-weight: 900; }
+    .acknowledgment { display: none; margin-top: 28px; padding: clamp(20px, 3vw, 30px); border: 1px solid #e0c98e; border-radius: 14px; background: var(--amber-weak); }
+    .acknowledgment.is-visible { display: block; animation: enter .3s ease both; }
+    .acknowledgment h3 { margin: 10px 0 9px; }
+    .acknowledgment p { max-width: 710px; margin: 0; color: var(--amber-dark); }
+    .status-chip { display: inline-flex; align-items: center; min-height: 30px; padding: 5px 9px; border: 1px solid currentColor; border-radius: 999px; font-size: 10px; font-weight: 900; line-height: 1.1; text-transform: uppercase; }
+    .status-good { color: var(--green-dark); background: var(--green-weak); }
+    .status-attention { color: var(--amber-dark); background: var(--amber-weak); }
+    .status-neutral { color: var(--ink-soft); background: var(--paper); }
+    .status-open { color: #34556a; background: #ebf2f6; }
+    .transition { display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end; max-width: var(--max); margin: 0 auto; padding: 76px var(--gutter); }
+    .transition p { max-width: 690px; margin: 13px 0 0; color: var(--ink-soft); font-size: 18px; }
+    .transition-mark { display: grid; place-items: center; width: 70px; height: 70px; border: 1px solid var(--line-strong); border-radius: 50%; color: var(--green-dark); font-size: 26px; }
+    .dashboard-surface { background: #f3f5f2; }
+    .dashboard-topbar { background: var(--surface); }
+    .dashboard-title { font-size: 16px; font-weight: 900; }
+    .dashboard-title small { display: block; color: var(--ink-faint); font-size: 10px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+    .dashboard-body { display: grid; grid-template-columns: minmax(230px, .58fr) minmax(0, 1.52fr) minmax(205px, .56fr); min-height: 700px; }
+    .dashboard-queue, .dashboard-main, .dashboard-rail { padding: 24px; }
+    .dashboard-queue { border-right: 1px solid var(--line); background: #ebefeb; }
+    .dashboard-main { background: var(--surface); }
+    .dashboard-rail { border-left: 1px solid var(--line); background: var(--cream); }
+    .pane-label { margin-bottom: 16px; color: var(--ink-soft); font-size: 11px; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .overall-status { padding: 16px; border: 1px solid #c7ddd4; border-radius: 10px; background: var(--green-weak); }
+    .overall-status strong { display: block; margin: 7px 0 3px; font-size: 16px; }
+    .overall-status p { margin: 0; color: var(--green-dark); font-size: 12px; }
+    .queue-list { display: grid; gap: 10px; margin-top: 24px; }
+    .queue-business { display: block; width: 100%; padding: 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); text-align: left; }
+    .queue-business:hover, .queue-business[aria-current="true"] { border-color: var(--green); background: var(--green-weak); }
+    .queue-business strong { display: block; margin-bottom: 5px; font-size: 14px; }
+    .queue-business span { display: block; color: var(--ink-soft); font-size: 12px; }
+    .queue-business .status-chip { display: inline-flex; margin-top: 10px; }
+    .attention-panel { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: start; margin-bottom: 26px; padding: 19px; border: 1px solid #e6cf9f; border-radius: 12px; background: var(--amber-weak); }
+    .attention-panel h3 { margin: 5px 0 7px; font-size: 22px; }
+    .attention-panel p { margin: 0; color: var(--amber-dark); font-size: 13px; }
+    .attention-panel .secondary-button { align-self: center; white-space: nowrap; }
+    .card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .business-card { display: flex; min-height: 284px; flex-direction: column; padding: 17px; border: 1px solid var(--line); border-radius: 11px; background: var(--paper); }
+    .business-card.is-attention { border-color: #d5b36c; background: #fffdf7; }
+    .card-head { display: flex; align-items: start; justify-content: space-between; gap: 12px; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
+    .card-head h4 { font-size: 20px; }
+    .card-head p { margin: 5px 0 0; color: var(--ink-soft); font-size: 12px; }
+    .metric-list { display: grid; gap: 0; margin: 14px 0 0; }
+    .metric-list div { display: flex; justify-content: space-between; gap: 14px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+    .metric-list dt { color: var(--ink-soft); font-size: 12px; }
+    .metric-list dd { margin: 0; font-size: 12px; font-weight: 900; text-align: right; }
+    .card-action { width: 100%; margin-top: auto; }
+    .detail-view { display: none; }
+    .detail-view.is-visible { display: block; animation: enter .28s ease both; }
+    .portfolio-view.is-hidden { display: none; }
+    .detail-head { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 16px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .detail-head h3 { font-size: 28px; }
+    .detail-head p { margin: 7px 0 0; color: var(--ink-soft); font-size: 13px; }
+    .back-button { margin-bottom: 18px; }
+    .detail-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 20px; }
+    .data-block { min-height: 82px; padding: 13px; border: 1px solid var(--line); border-radius: 9px; background: var(--paper); }
+    .data-block h4 { margin-bottom: 8px; color: var(--ink-soft); font-family: "SFMono-Regular", Consolas, monospace; font-size: 10px; letter-spacing: .07em; text-transform: uppercase; }
+    .data-block p { margin: 0; font-size: 14px; font-weight: 900; }
+    .detail-columns { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(250px, .92fr); gap: 18px; margin-top: 20px; }
+    .detail-section { padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+    .detail-section h4 { margin-bottom: 13px; font-size: 16px; letter-spacing: -.03em; }
+    .detail-section p { margin: 0; color: var(--ink-soft); font-size: 13px; }
+    .inventory-row, .activity-row { display: flex; align-items: start; justify-content: space-between; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+    .inventory-row:last-child, .activity-row:last-child { border-bottom: 0; padding-bottom: 0; }
+    .inventory-row strong, .activity-row strong { display: block; font-size: 13px; }
+    .inventory-row span, .activity-row span { display: block; color: var(--ink-soft); font-size: 12px; }
+    .notes-section { margin-top: 18px; }
+    .note-item { padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .note-item:first-of-type { padding-top: 0; }
+    .note-item:last-of-type { border-bottom: 0; padding-bottom: 0; }
+    .note-meta { display: flex; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 5px; color: var(--ink-faint); font-size: 11px; }
+    .note-item p { color: var(--ink); font-size: 13px; }
+    .note-form { display: none; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .note-form.is-visible { display: block; }
+    .field { display: grid; gap: 7px; margin-bottom: 13px; }
+    label, legend { color: var(--ink); font-size: 13px; font-weight: 900; }
+    input, select, textarea { width: 100%; min-height: 46px; padding: 10px 12px; border: 1px solid var(--line-strong); border-radius: 7px; background: var(--surface); color: var(--ink); }
+    textarea { min-height: 86px; resize: vertical; }
+    input::placeholder, textarea::placeholder { color: var(--ink-faint); }
+    .radio-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; border: 0; padding: 0; margin: 0; }
+    .radio-option { display: flex; align-items: flex-start; gap: 8px; min-height: 52px; padding: 11px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); cursor: pointer; }
+    .radio-option:has(input:checked) { border-color: var(--green); background: var(--green-weak); }
+    .radio-option input { width: 18px; min-height: 18px; margin-top: 1px; accent-color: var(--green); }
+    .radio-option span { color: var(--ink-soft); font-size: 12px; }
+    .radio-option strong { display: block; color: var(--ink); font-size: 13px; }
+    .followup-box { margin-top: 13px; padding: 13px; border: 1px solid var(--line); border-radius: 8px; background: var(--paper); }
+    .followup-box label { display: flex; align-items: center; gap: 9px; }
+    .followup-box input[type="checkbox"] { width: 18px; height: 18px; min-height: 18px; accent-color: var(--green); }
+    .followup-fields { display: none; margin-top: 12px; }
+    .followup-fields.is-visible { display: block; }
+    .followup-status { margin-top: 11px; color: var(--green-dark); font-size: 12px; }
+    .rail-list { display: grid; gap: 0; margin: 0; }
+    .rail-list div { padding: 12px 0; border-bottom: 1px solid rgba(93,104,98,.2); }
+    .rail-list dt { margin-bottom: 4px; color: var(--ink-soft); font-size: 12px; }
+    .rail-list dd { margin: 0; font-size: 15px; font-weight: 900; }
+    .recent-list { display: grid; gap: 12px; margin-top: 25px; }
+    .recent-item { padding-top: 12px; border-top: 1px solid rgba(93,104,98,.22); }
+    .recent-item strong { display: block; font-size: 12px; }
+    .recent-item span { display: block; margin-top: 3px; color: var(--ink-soft); font-size: 11px; }
+    .handoff-note { margin-top: 24px; padding-top: 15px; border-top: 1px solid rgba(93,104,98,.22); color: var(--ink-soft); font-size: 12px; }
+    .closing-section { padding-top: 84px; padding-bottom: 100px; background: var(--dark); color: #fff; }
+    .closing-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(270px, .66fr); gap: 60px; align-items: end; }
+    .closing-section .eyebrow { color: #9ed0c4; }
+    .closing-section h2 { max-width: 700px; margin-top: 15px; }
+    .closing-copy { max-width: 620px; margin: 20px 0 0; color: #c5d0ca; font-size: 18px; }
+    .cta-stack { display: grid; gap: 11px; }
+    .placeholder-cta { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 50px; padding: 12px 15px; border: 1px solid #3a4b43; border-radius: 8px; background: #1b2923; color: #fff; text-align: left; }
+    .placeholder-cta small { color: #9db0a7; font-family: "SFMono-Regular", Consolas, monospace; font-size: 10px; text-align: right; }
+    .closing-note { max-width: 760px; margin-top: 48px; padding-top: 17px; border-top: 1px solid #3a4b43; color: #9db0a7; font-size: 12px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+    @media (max-width: 1199px) {
+      .section-head { grid-template-columns: 80px minmax(0, 1fr); }
+      .section-context { grid-column: 2; }
+      .dashboard-body { grid-template-columns: minmax(205px, .56fr) minmax(0, 1.44fr); }
+      .dashboard-rail { grid-column: 1 / -1; border-top: 1px solid var(--line); border-left: 0; }
+      .rail-list { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 15px; }
+      .rail-list div { border-bottom: 0; }
+    }
+    @media (max-width: 880px) {
+      .pos-intro, .pos-layout, .detail-columns, .closing-grid { grid-template-columns: 1fr; gap: 28px; }
+      .card-grid { grid-template-columns: 1fr; }
+      .business-card { min-height: 0; }
+      .card-action { width: auto; align-self: start; margin-top: 16px; }
+      .detail-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 767px) {
+      .shell-header { min-height: 60px; padding-block: 10px; }
+      .header-meta { gap: 8px; }
+      .header-meta > span { display: none; }
+      .story-intro { padding-top: 54px; padding-bottom: 80px; }
+      .intro-grid, .intro-actions, .business-selector, .option-grid, .review-summary, .radio-group { grid-template-columns: 1fr; }
+      .intro-actions, .form-actions, .ack-actions { align-items: stretch; flex-direction: column; }
+      .intro-actions > *, .form-actions > *, .ack-actions > * { width: 100%; }
+      h1 { font-size: clamp(43px, 14vw, 68px); }
+      .lede { font-size: 17px; }
+      .story-section { padding-top: 58px; padding-bottom: 58px; }
+      .section-head { display: block; margin-bottom: 30px; }
+      .section-number { margin-bottom: 14px; }
+      .section-context { margin-top: 14px; }
+      .surface-topbar, .dashboard-topbar { align-items: flex-start; flex-direction: column; }
+      .surface-nav, .dashboard-nav { display: none; }
+      .surface-content { padding: 16px; }
+      .business-choice { min-height: 68px; }
+      .transition { grid-template-columns: 1fr; padding: 58px var(--gutter); }
+      .transition-mark { width: 54px; height: 54px; }
+      .dashboard-body { display: block; min-height: 0; }
+      .dashboard-queue, .dashboard-main, .dashboard-rail { padding: 20px; border-right: 0; border-left: 0; border-bottom: 1px solid var(--line); }
+      .attention-panel { grid-template-columns: 1fr; }
+      .attention-panel .secondary-button { width: 100%; }
+      .detail-metrics { grid-template-columns: 1fr 1fr; }
+      .rail-list { grid-template-columns: 1fr 1fr; }
+      .closing-section { padding-top: 62px; padding-bottom: 72px; }
+      .closing-copy { font-size: 16px; }
+      .placeholder-cta { align-items: flex-start; flex-direction: column; }
+      .placeholder-cta small { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="shell-header" aria-label="Vismatic concept header">
+    <div class="wordmark">VISMATIC.</div>
+    <div class="header-meta">
+      <span class="mono">CONCEPT 01 / OWNER OPERATIONS</span>
+      <span class="sample-pill">Sample/demo</span>
+      <button class="reset-button" id="reset-demo" type="button">Reset demo</button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="story-intro" aria-labelledby="intro-title">
+      <div class="story-inner intro-grid">
+        <div>
+          <div class="eyebrow">A reusable conversation opener</div>
+          <h1 id="intro-title">See the shape of clearer business visibility.</h1>
+          <p class="lede">When the owner cannot be everywhere at once, a small operational record can become a calmer way to understand what is happening across the portfolio — and what deserves a closer look.</p>
+          <div class="intro-actions">
+            <a class="primary-button" href="#sample-pos">Explore the sample flow <span aria-hidden="true">↓</span></a>
+            <span class="mono field-note">Owner journey / sample data only</span>
+          </div>
+        </div>
+        <aside class="intro-aside" aria-label="Story framing">
+          <div class="eyebrow">The idea</div>
+          <strong>From a single sample entry to one owner view.</strong>
+          <p>This fictional journey shows how a bounded POS surface could hand off just enough context for an owner to review three businesses without implying a live system.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="story-section alt" id="sample-pos" aria-labelledby="pos-section-title">
+      <div class="story-inner">
+        <div class="section-head">
+          <div class="section-number">01 / Record</div>
+          <div>
+            <div class="eyebrow">Bounded sample POS system</div>
+            <h2 id="pos-section-title">Start with the record that makes the day visible.</h2>
+          </div>
+          <p class="section-context">A deliberately small point-of-sale concept for capturing a fictional session or product entry at one business. It is a conversation surface, not a live checkout.</p>
+        </div>
+        <div class="notice" role="note"><span aria-hidden="true">●</span><span><strong>Interactive concept using sample data.</strong> Not connected to live POS systems, payments, inventory, authentication, or business records. All values below are fictional.</span></div>
+
+        <article class="surface" aria-labelledby="pos-surface-title">
+          <div class="surface-topbar">
+            <div class="surface-brand">
+              <div class="surface-mark" aria-hidden="true">POS</div>
+              <div><div class="surface-name" id="pos-surface-title">Sample operations entry</div><div class="surface-meta">Owner concept / fictional workspace</div></div>
+            </div>
+            <nav class="surface-nav" aria-label="Sample POS navigation"><a href="#pos-entry">New entry</a><a href="#transaction-summary">Review</a></nav>
+          </div>
+          <div class="surface-content">
+            <div class="pos-intro">
+              <div><div class="eyebrow">A focused first surface</div><h2>Choose the business, then record what happened.</h2><p>The entry stays bounded: one business, one sample session or product selection, one review step, and a clear handoff to owner oversight.</p></div>
+              <aside class="pos-brief"><div class="meta-label">Why this matters</div><strong>Operational context before aggregation.</strong><p>The dashboard can only be useful when the owner can understand where a sample activity record came from.</p></aside>
+            </div>
+            <div class="surface-rule"></div>
+            <div class="pos-layout" id="pos-entry">
+              <section aria-labelledby="entry-heading">
+                <div class="subhead" id="entry-heading">1. Select a business</div>
+                <div class="business-selector" role="group" aria-label="Choose a sample business">
+                  <button class="business-choice" type="button" data-business="Arcade Place" aria-pressed="true"><strong>Arcade Place</strong><span>Games + bottled drinks</span></button>
+                  <button class="business-choice" type="button" data-business="Playhouse" aria-pressed="false"><strong>Playhouse</strong><span>Sessions + socks / toys</span></button>
+                  <button class="business-choice" type="button" data-business="Massage Chairs" aria-pressed="false"><strong>Massage Chairs</strong><span>Time-based chair use</span></button>
+                </div>
+                <div class="subhead">2. Add a sample entry</div>
+                <form id="pos-form" novalidate>
+                  <fieldset class="field" style="border:0;padding:0;margin:0 0 20px;">
+                    <legend>Session or product</legend>
+                    <div class="option-grid" id="entry-options"></div>
+                    <div class="error-text" id="entry-error" aria-live="polite"></div>
+                  </fieldset>
+                  <div class="form-actions pos-submit">
+                    <button class="primary-button" type="submit">Review sample entry <span aria-hidden="true">→</span></button>
+                    <span class="field-note">No payment is processed. No inventory is changed.</span>
+                  </div>
+                </form>
+                <section class="review-box" id="review-box" aria-live="polite" aria-labelledby="review-title">
+                  <h4 id="review-title">Review the fictional entry</h4>
+                  <dl class="review-summary" id="review-summary"></dl>
+                  <div class="form-actions" style="margin-top:18px;">
+                    <button class="primary-button" id="submit-entry" type="button">Submit sample entry</button>
+                    <button class="ghost-button" id="edit-entry" type="button">Edit selection</button>
+                  </div>
+                </section>
+              </section>
+              <aside class="pos-side" id="transaction-summary" aria-labelledby="summary-heading">
+                <div class="subhead" id="summary-heading">Transaction summary</div>
+                <p class="summary-empty" id="summary-empty">Choose a sample option to see the fictional entry summary.</p>
+                <dl class="summary-list" id="summary-list" hidden></dl>
+                <div class="summary-callout"><strong>Bounded by design.</strong>This concept does not imply live payment, real pricing, integrated inventory, staff accounts, authentication, or durable persistence.</div>
+              </aside>
+            </div>
+            <section class="acknowledgment" id="pos-ack" aria-live="polite" aria-labelledby="ack-title">
+              <span class="status-chip status-good" id="ack-status">Entry status: Recorded in concept</span>
+              <h3 id="ack-title">The sample entry is ready for owner review.</h3>
+              <p id="ack-copy">This fictional record will now appear as a small piece of recent activity in the management dashboard below. No live record was created.</p>
+              <div class="ack-actions" style="margin-top:20px;"><a class="secondary-button" href="#management-dashboard" id="view-dashboard">Continue to the management dashboard <span aria-hidden="true">↓</span></a><button class="ghost-button" type="button" id="edit-after-submit">Edit sample entry</button></div>
+            </section>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="story-section" id="dashboard-transition" aria-labelledby="transition-title">
+      <div class="transition">
+        <div><div class="eyebrow">02 / Hand off</div><h2 id="transition-title">One entry becomes part of the owner’s wider view.</h2><p>The next surface is a calm management view: three businesses, one reporting period, and one visible reason to look closer. The sample entry above is carried into recent activity.</p></div>
+        <div class="transition-mark" aria-hidden="true">↓</div>
+      </div>
+    </section>
+
+    <section class="story-section alt" id="management-dashboard" aria-labelledby="dashboard-section-title">
+      <div class="story-inner">
+        <div class="section-head">
+          <div class="section-number">03 / Monitor</div>
+          <div><div class="eyebrow">Owner-facing management surface</div><h2 id="dashboard-section-title">Make the next decision easier to find.</h2></div>
+          <p class="section-context">A portfolio view gives the owner a consistent read across Arcade Place, Playhouse, and Massage Chairs, while keeping the busiest exception close to the top.</p>
+        </div>
+        <div class="notice" role="note"><span aria-hidden="true">●</span><span><strong>Sample reporting period · 09–15 Sep 2026.</strong> The figures, statuses, staff update, and activity are fictional demonstration data. Playhouse is marked for attention as a sample scenario only.</span></div>
+
+        <article class="dashboard-surface" aria-labelledby="dashboard-title">
+          <div class="dashboard-topbar">
+            <div class="surface-brand"><div class="surface-mark" aria-hidden="true">M</div><div><div class="dashboard-title" id="dashboard-title">Multi-business Management Dashboard<small>Owner view / sample portfolio</small></div></div></div>
+            <nav class="dashboard-nav" aria-label="Sample management navigation"><span aria-current="page">Overview</span><span>Activity</span><span>Follow-up</span></nav>
+          </div>
+          <div class="dashboard-body">
+            <aside class="dashboard-queue" aria-label="Portfolio status">
+              <div class="pane-label">Operating status</div>
+              <div class="overall-status"><span class="status-chip status-good">Overall: steady</span><strong>2 of 3 businesses clear</strong><p>One sample exception needs an owner review.</p></div>
+              <div class="pane-label" style="margin-top:27px;">Businesses</div>
+              <div class="queue-list">
+                <button class="queue-business" type="button" data-open-business="Arcade Place" aria-current="false"><strong>Arcade Place</strong><span>36 sample sessions · update complete</span><span class="status-chip status-good">Operating</span></button>
+                <button class="queue-business" type="button" data-open-business="Playhouse" aria-current="true"><strong>Playhouse</strong><span>72 sample sessions · update incomplete</span><span class="status-chip status-attention">Needs attention</span></button>
+                <button class="queue-business" type="button" data-open-business="Massage Chairs" aria-current="false"><strong>Massage Chairs</strong><span>23 sample sessions · update complete</span><span class="status-chip status-good">Operating</span></button>
+              </div>
+            </aside>
+
+            <section class="dashboard-main" aria-label="Portfolio overview and business detail">
+              <div class="portfolio-view" id="portfolio-view">
+                <div class="pane-label">Attention &amp; Follow-up</div>
+                <div class="attention-panel" id="attention-panel"><div><span class="status-chip status-attention">Needs attention · sample</span><h3>Playhouse activity is high, but the staff update is incomplete.</h3><p>Review the latest activity and collections before relying on the current picture. This is a fictional scenario, not automatic issue detection.</p></div><button class="secondary-button" type="button" data-open-business="Playhouse">Open Playhouse details <span aria-hidden="true">→</span></button></div>
+                <div class="pane-label">Portfolio overview · sample values</div>
+                <div class="card-grid">
+                  <article class="business-card"><div class="card-head"><div><h4>Arcade Place</h4><p>Games + related products</p></div><span class="status-chip status-good">Operating</span></div><dl class="metric-list"><div><dt>Collections</dt><dd>1,840 sample units</dd></div><div><dt>Activity</dt><dd>36 sessions</dd></div><div><dt>Issues</dt><dd>1 stock watch</dd></div><div><dt>Inventory</dt><dd>Drinks · watch</dd></div><div><dt>Staff update</dt><dd>Complete</dd></div><div><dt>Physical status</dt><dd>Open / steady</dd></div></dl><button class="secondary-button card-action" type="button" data-open-business="Arcade Place">View business details</button></article>
+                  <article class="business-card is-attention"><div class="card-head"><div><h4>Playhouse</h4><p>Sessions + socks / toys</p></div><span class="status-chip status-attention">Needs attention</span></div><dl class="metric-list"><div><dt>Collections</dt><dd>3,420 sample units</dd></div><div><dt>Activity</dt><dd>72 sessions · high</dd></div><div><dt>Issues</dt><dd>Staff update missing</dd></div><div><dt>Inventory</dt><dd>Socks · watch</dd></div><div><dt>Staff update</dt><dd>Incomplete · 14:10</dd></div><div><dt>Physical status</dt><dd>Open / busy</dd></div></dl><button class="primary-button card-action" type="button" data-open-business="Playhouse">Review Playhouse</button></article>
+                  <article class="business-card"><div class="card-head"><div><h4>Massage Chairs</h4><p>Time-based chair use</p></div><span class="status-chip status-good">Operating</span></div><dl class="metric-list"><div><dt>Collections</dt><dd>1,260 sample units</dd></div><div><dt>Activity</dt><dd>23 sessions</dd></div><div><dt>Issues</dt><dd>No open exceptions</dd></div><div><dt>Inventory</dt><dd>No product count</dd></div><div><dt>Staff update</dt><dd>Complete</dd></div><div><dt>Physical status</dt><dd>Open / steady</dd></div></dl><button class="secondary-button card-action" type="button" data-open-business="Massage Chairs">View business details</button></article>
+                </div>
+                <div class="recent-list" aria-labelledby="recent-title"><div class="pane-label" id="recent-title">Recent activity</div><div class="recent-item" id="recent-sample-entry"><strong id="recent-entry-title">No new sample entry yet.</strong><span id="recent-entry-copy">Submit the bounded POS entry above to connect a record to this area.</span></div><div class="recent-item"><strong>Playhouse · sample status review</strong><span>High activity with an incomplete staff update · sample scenario</span></div><div class="recent-item"><strong>Arcade Place · inventory watch</strong><span>Bottled drinks below the fictional watch threshold · sample scenario</span></div></div>
+              </div>
+
+              <div class="detail-view" id="detail-view" aria-live="polite">
+                <button class="text-button back-button" type="button" id="back-to-portfolio">← Back to portfolio overview</button>
+                <div class="detail-head"><div><div class="eyebrow">Business detail / owner review</div><h3 id="detail-business-name">Playhouse</h3><p id="detail-business-subtitle">Sessions + socks / toys · sample operating record</p></div><span class="status-chip status-attention" id="detail-business-status">Needs attention · sample</span></div>
+                <div class="detail-metrics"><div class="data-block"><h4>Collections</h4><p id="detail-collections">3,420 sample units</p></div><div class="data-block"><h4>Activity</h4><p id="detail-activity">72 sessions · high</p></div><div class="data-block"><h4>Physical status</h4><p id="detail-physical">Open / busy</p></div><div class="data-block"><h4>Staff update</h4><p id="detail-staff">Incomplete · 14:10</p></div></div>
+                <div class="detail-columns"><section class="detail-section"><h4>Why this business needs attention</h4><p id="detail-attention-copy">Activity is high in this sample period, but the latest staff update is missing key context. The owner can review the supporting records and leave a note before deciding what to do next.</p><div class="activity-row" style="margin-top:10px;"><div><strong>Latest activity</strong><span id="detail-latest-activity">Sample session entries recorded throughout the period</span></div><span class="status-chip status-open">High activity</span></div><div class="activity-row"><div><strong>Staff update</strong><span id="detail-staff-context">Last sample update was incomplete; no automatic message is sent.</span></div><span class="status-chip status-attention">Review</span></div></section><section class="detail-section"><h4>Inventory status</h4><div class="inventory-row"><div><strong>Socks</strong><span>Sample count is below the fictional watch point</span></div><span class="status-chip status-attention">Watch</span></div><div class="inventory-row"><div><strong>Toys</strong><span>Sample count is within fictional range</span></div><span class="status-chip status-good">Steady</span></div><div class="inventory-row"><div><strong>Other</strong><span>No additional sample categories</span></div><span class="status-chip status-neutral">None</span></div></section></div>
+                <section class="detail-section notes-section"><div style="display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap;"><div><h4>Owner notes &amp; follow-up</h4><p>Keep context close to the issue. Notes are local to this concept and are not shared or sent.</p></div><button class="secondary-button" type="button" id="open-note-form">Add a note</button></div><div id="notes-list"><div class="note-item"><div class="note-meta"><span>Sample note · 15 Sep 2026</span><span class="status-chip status-attention">Follow-up</span><span>Private to Owner</span></div><p>Check the missing staff context before the next review window.</p></div></div><form class="note-form" id="note-form" novalidate><div class="field"><label for="note-content">Note content</label><textarea id="note-content" placeholder="Write a short sample note for your next review" required></textarea><div class="error-text" id="note-error" aria-live="polite"></div></div><fieldset class="field" style="border:0;padding:0;"><legend>Visibility</legend><div class="radio-group"><label class="radio-option"><input type="radio" name="visibility" value="Private to Owner" checked><span><strong>Private</strong>Owner only</span></label><label class="radio-option"><input type="radio" name="visibility" value="Shared with Partner"><span><strong>Shared</strong>Sample partner option</span></label></div></fieldset><div class="field"><label for="note-category">Category</label><select id="note-category"><option>Follow-up</option><option>Observation</option><option>Decision</option></select></div><div class="followup-box"><label><input type="checkbox" id="create-followup"> Create a manual follow-up reminder</label><div class="followup-fields" id="followup-fields"><div class="field" style="margin-top:12px;margin-bottom:0;"><label for="followup-date">Reminder date</label><input id="followup-date" type="date" value="2026-09-17"><span class="field-note">Manual sample reminder only. No notification is sent.</span></div></div></div><div class="form-actions" style="margin-top:16px;"><button class="primary-button" type="submit">Save sample note</button><button class="ghost-button" type="button" id="cancel-note">Cancel</button></div><div class="followup-status" id="followup-status" aria-live="polite"></div></form></section>
+              </div>
+            </section>
+
+            <aside class="dashboard-rail" aria-label="Reporting period and status context"><div class="pane-label">Reporting context</div><dl class="rail-list"><div><dt>Period</dt><dd>09–15 Sep</dd></div><div><dt>Businesses</dt><dd>3 sample</dd></div><div><dt>Open attention</dt><dd id="rail-attention">1 item</dd></div><div><dt>Last review</dt><dd>Sample / today</dd></div></dl><p class="handoff-note">This management view is designed for an owner checking in remotely. It does not replace staff reporting or automatically verify an issue.</p></aside>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="closing-section" aria-labelledby="closing-title"><div class="closing-inner"><div class="closing-grid"><div><div class="eyebrow">04 / Continue the conversation</div><h2 id="closing-title">If this direction feels useful, make the next version yours.</h2><p class="closing-copy">The reusable template can later be adapted around approved business language, real operating rules, and the integrations that are explicitly chosen. For now, the conversation stays calm, bounded, and sample-only.</p></div><div class="cta-stack" aria-label="Non-live conversation destinations"><button class="placeholder-cta" type="button" disabled>Continue with a tailored version <small>Destination to be supplied — not live.</small></button><button class="placeholder-cta" type="button" disabled>Book a short discovery call <small>Destination to be supplied — not live.</small></button><button class="placeholder-cta" type="button" disabled>Ask about the owner workflow <small>Destination to be supplied — not live.</small></button></div></div><div class="closing-note">Interactive concept using sample data. Not connected to live POS systems, payments, inventory, staff updates, notifications, or business records. CTA destinations are intentionally blank/non-live placeholders.</div></div></section>
+  </main>
+
+  <script>
+    /*
+      LEAD CUSTOMIZATION SEAM
+      Keep the narrative and state model stable. Replace only with approved,
+      user-provided or verified lead information in a future version.
+    */
+    const MULTI_BUSINESS_DASHBOARD_CONFIG = {
+      projectName: "Multi-business Management Dashboard",
+      audience: "Owner",
+      businesses: {
+        "Arcade Place": {
+          descriptor: "Games + bottled drinks",
+          options: [
+            { id: "arcade-session", label: "Sample arcade session", detail: "30-minute game session", type: "Session" },
+            { id: "arcade-drink", label: "Sample bottled drink", detail: "Related product entry", type: "Product" }
+          ],
+          collections: "1,840 sample units", activity: "36 sessions", issues: "1 stock watch", inventory: "Drinks · watch", staff: "Complete", physical: "Open / steady"
+        },
+        "Playhouse": {
+          descriptor: "Sessions + socks / toys",
+          options: [
+            { id: "playhouse-session", label: "Sample play session", detail: "60-minute play session", type: "Session" },
+            { id: "playhouse-socks", label: "Sample grip socks", detail: "Related product entry", type: "Product" },
+            { id: "playhouse-toy", label: "Sample small toy", detail: "Related product entry", type: "Product" }
+          ],
+          collections: "3,420 sample units", activity: "72 sessions · high", issues: "Staff update missing", inventory: "Socks · watch", staff: "Incomplete · 14:10", physical: "Open / busy"
+        },
+        "Massage Chairs": {
+          descriptor: "Time-based chair use",
+          options: [
+            { id: "massage-15", label: "Sample chair session", detail: "15-minute chair use", type: "Session" },
+            { id: "massage-30", label: "Sample extended session", detail: "30-minute chair use", type: "Session" }
+          ],
+          collections: "1,260 sample units", activity: "23 sessions", issues: "No open exceptions", inventory: "No product count", staff: "Complete", physical: "Open / steady"
+        }
+      },
+      destinations: { tailoredVersion: "", discoveryCall: "", ownerWorkflow: "" },
+      sampleBoundary: "Interactive concept using sample data. Not connected to live POS systems, payments, or business records."
+    };
+
+    const state = { business: "Arcade Place", option: null, submitted: false, selectedDetail: null, notes: [] };
+    const $ = (id) => document.getElementById(id);
+    const posForm = $("pos-form");
+
+    function currentBusiness() { return MULTI_BUSINESS_DASHBOARD_CONFIG.businesses[state.business]; }
+    function currentOption() { return currentBusiness().options.find((option) => option.id === state.option) || null; }
+    function setBusiness(name) {
+      state.business = name;
+      state.option = null;
+      document.querySelectorAll("[data-business]").forEach((button) => button.setAttribute("aria-pressed", button.dataset.business === name ? "true" : "false"));
+      renderOptions();
+      renderSummary();
+    }
+    function renderOptions() {
+      const options = currentBusiness().options;
+      $("entry-options").innerHTML = options.map((option) => `<label class="option-card"><input type="radio" name="entry-option" value="${option.id}" ${state.option === option.id ? "checked" : ""}><span><strong>${option.label}</strong><span>${option.detail} · sample only</span></span></label>`).join("");
+      $("entry-options").querySelectorAll('input[name="entry-option"]').forEach((input) => input.addEventListener("change", () => { state.option = input.value; renderSummary(); }));
+      $("entry-error").textContent = "";
+    }
+    function renderSummary() {
+      const option = currentOption();
+      const empty = $("summary-empty");
+      const list = $("summary-list");
+      if (!option) { empty.hidden = false; list.hidden = true; list.innerHTML = ""; return; }
+      empty.hidden = true; list.hidden = false;
+      list.innerHTML = [["Business", state.business], ["Entry", option.label], ["Type", option.type], ["Duration / item", option.detail], ["Collection", "Sample marker / no live price"], ["Record state", "Ready for review"]].map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join("");
+    }
+    function openReview() {
+      const option = currentOption();
+      if (!option) { $("entry-error").textContent = "Choose one sample session or product option first."; return; }
+      const details = [["Business", state.business], ["Entry", option.label], ["Type", option.type], ["Duration / item", option.detail], ["Collection", "Sample marker / no live price"]];
+      $("review-summary").innerHTML = details.map(([label, value]) => `<dt>${label}</dt><dd>${value}</dd>`).join("");
+      $("review-box").classList.add("is-visible");
+      $("submit-entry").focus();
+    }
+    function submitEntry() {
+      if (!currentOption()) return;
+      state.submitted = true;
+      $("pos-ack").classList.add("is-visible");
+      $("ack-status").textContent = "Entry status: Recorded in concept";
+      $("ack-title").textContent = `${state.business} now has a sample activity record.`;
+      $("ack-copy").textContent = "This fictional record is carried into Recent activity in the management dashboard below. No live payment, inventory, or business record was changed.";
+      const option = currentOption();
+      $("recent-entry-title").textContent = `${state.business} · ${option.label}`;
+      $("recent-entry-copy").textContent = `${option.detail} · sample entry submitted in the bounded POS concept`;
+      $("view-dashboard").focus();
+    }
+    function resetDemo() {
+      state.business = "Arcade Place"; state.option = null; state.submitted = false; state.selectedDetail = null; state.notes = [];
+      posForm.reset(); $("review-box").classList.remove("is-visible"); $("pos-ack").classList.remove("is-visible"); $("recent-entry-title").textContent = "No new sample entry yet."; $("recent-entry-copy").textContent = "Submit the bounded POS entry above to connect a record to this area."; $("note-form").classList.remove("is-visible"); $("followup-fields").classList.remove("is-visible"); $("followup-status").textContent = ""; $("note-content").value = "";
+      renderOptions(); renderSummary(); showPortfolio();
+      window.location.hash = "sample-pos";
+      $("reset-demo").focus();
+    }
+    function showPortfolio() {
+      $("portfolio-view").classList.remove("is-hidden"); $("detail-view").classList.remove("is-visible"); state.selectedDetail = null;
+      document.querySelectorAll(".queue-business").forEach((button) => button.setAttribute("aria-current", button.dataset.openBusiness === "Playhouse" ? "true" : "false"));
+    }
+    function showBusiness(name) {
+      const business = MULTI_BUSINESS_DASHBOARD_CONFIG.businesses[name];
+      state.selectedDetail = name;
+      $("portfolio-view").classList.add("is-hidden"); $("detail-view").classList.add("is-visible");
+      $("detail-business-name").textContent = name; $("detail-business-subtitle").textContent = `${business.descriptor} · sample operating record`;
+      $("detail-collections").textContent = business.collections; $("detail-activity").textContent = business.activity; $("detail-physical").textContent = business.physical; $("detail-staff").textContent = business.staff;
+      const attention = name === "Playhouse";
+      $("detail-business-status").textContent = attention ? "Needs attention · sample" : "Operating · sample";
+      $("detail-business-status").className = `status-chip ${attention ? "status-attention" : "status-good"}`;
+      $("detail-attention-copy").textContent = attention ? "Activity is high in this sample period, but the latest staff update is missing key context. The owner can review the supporting records and leave a note before deciding what to do next." : "This sample business has no open attention item in the current reporting period. The owner can still inspect its activity and operating context.";
+      $("detail-latest-activity").textContent = attention ? "Sample session entries recorded throughout the period" : `${business.activity} in the sample reporting period`;
+      $("detail-staff-context").textContent = attention ? "Last sample update was incomplete; no automatic message is sent." : "Latest sample update marked complete; no automatic verification is implied.";
+      renderNotes();
+      document.querySelectorAll(".queue-business").forEach((button) => button.setAttribute("aria-current", button.dataset.openBusiness === name ? "true" : "false"));
+      $("detail-business-name").focus();
+    }
+    function renderNotes() {
+      const base = `<div class="note-item"><div class="note-meta"><span>Sample note · 15 Sep 2026</span><span class="status-chip status-attention">Follow-up</span><span>Private to Owner</span></div><p>Check the missing staff context before the next review window.</p></div>`;
+      const added = state.notes.map((note) => `<div class="note-item"><div class="note-meta"><span>Added in this demo</span><span class="status-chip status-${note.category === "Follow-up" ? "attention" : "neutral"}">${note.category}</span><span>${note.visibility}</span></div><p>${note.content}</p>${note.followup ? `<div class="followup-status">Manual follow-up set for ${note.date}. No notification sent.</div>` : ""}</div>`).join("");
+      $("notes-list").innerHTML = base + added;
+    }
+    function saveNote(event) {
+      event.preventDefault();
+      const content = $("note-content").value.trim();
+      if (content.length < 3) { $("note-error").textContent = "Add a short sample note before saving."; return; }
+      $("note-error").textContent = "";
+      const followup = $("create-followup").checked;
+      state.notes.push({ content, visibility: posForm.querySelector('input[name="visibility"]:checked')?.value || "Private to Owner", category: $("note-category").value, followup, date: $("followup-date").value });
+      renderNotes(); $("note-form").classList.remove("is-visible"); $("note-content").value = ""; $("create-followup").checked = false; $("followup-fields").classList.remove("is-visible");
+      $("followup-status").textContent = followup ? "Sample note saved and manual follow-up added to this in-page concept." : "Sample note saved to this in-page concept.";
+      $("attention-panel").querySelector("p").textContent = followup ? "A manual owner follow-up was added in this sample scenario. The original Playhouse context remains visible for review." : "An owner note was added in this sample scenario. The original Playhouse context remains visible for review.";
+      $("rail-attention").textContent = followup ? "1 + follow-up" : "1 item";
+      $("open-note-form").focus();
+    }
+
+    document.querySelectorAll("[data-business]").forEach((button) => button.addEventListener("click", () => setBusiness(button.dataset.business)));
+    posForm.addEventListener("submit", (event) => { event.preventDefault(); openReview(); });
+    $("submit-entry").addEventListener("click", submitEntry);
+    $("edit-entry").addEventListener("click", () => { $("review-box").classList.remove("is-visible"); $("entry-options").querySelector("input:checked")?.focus(); });
+    $("edit-after-submit").addEventListener("click", () => { $("review-box").classList.remove("is-visible"); $("pos-ack").classList.remove("is-visible"); $("entry-options").querySelector("input:checked")?.focus(); });
+    document.querySelectorAll("[data-open-business]").forEach((button) => button.addEventListener("click", () => showBusiness(button.dataset.openBusiness)));
+    $("back-to-portfolio").addEventListener("click", () => { showPortfolio(); $("attention-panel").querySelector("button").focus(); });
+    $("open-note-form").addEventListener("click", () => { $("note-form").classList.add("is-visible"); $("note-content").focus(); });
+    $("cancel-note").addEventListener("click", () => { $("note-form").classList.remove("is-visible"); $("open-note-form").focus(); });
+    $("create-followup").addEventListener("change", (event) => $("followup-fields").classList.toggle("is-visible", event.target.checked));
+    $("note-form").addEventListener("submit", saveNote);
+    $("reset-demo").addEventListener("click", resetDemo);
+    renderOptions(); renderSummary(); showPortfolio();
+  </script>
+</body>
+</html>
